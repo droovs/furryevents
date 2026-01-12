@@ -748,3 +748,150 @@ a:focus:not(:focus-visible) {
   opacity: 0;
   animation: slideUp 0.5s ease-out forwards;
 }
+
+/* ============================================
+   Uncertain Events Styling
+   ============================================ */
+
+/* Mini calendar uncertain day indicator */
+.mini-calendar-day.all-uncertain::after {
+  opacity: 0.5;
+  border: 1px dashed var(--event-color, #d946ef);
+  background: transparent !important;
+}
+
+.mini-calendar-day.has-uncertain::after {
+  box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.5);
+}
+
+/* Event list item uncertain styling */
+.event-list-item.uncertain {
+  border-style: dashed;
+  border-color: var(--event-color);
+  opacity: 0.85;
+}
+
+.event-list-item.uncertain:hover {
+  opacity: 1;
+}
+
+.event-uncertain-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1rem;
+  height: 1rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  background: #fbbf24;
+  color: #78350f;
+  border-radius: 50%;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* Uncertain divider in year view event list */
+.uncertain-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+  padding: 0.25rem 0;
+}
+
+.uncertain-divider::before,
+.uncertain-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #fbbf24, transparent);
+}
+
+.uncertain-divider span {
+  font-size: 0.625rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #d97706;
+  white-space: nowrap;
+}
+
+.dark .uncertain-divider span {
+  color: #fbbf24;
+}
+
+/* Month view uncertain event item */
+.month-event-list-item.uncertain {
+  border-style: dashed;
+  border-color: #fbbf24;
+  background: #fffbeb;
+}
+
+.dark .month-event-list-item.uncertain {
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.month-uncertain-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: 0.5rem;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.625rem;
+  font-weight: 500;
+  background: #fef3c7;
+  color: #b45309;
+  border-radius: 9999px;
+}
+
+.dark .month-uncertain-badge {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+/* Month view uncertain section header */
+.month-uncertain-section {
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.month-uncertain-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #d97706;
+}
+
+.dark .month-uncertain-header {
+  color: #fbbf24;
+}
+
+/* Event item uncertain mark in calendar grid */
+.event-item.uncertain {
+  border: 1px dashed rgba(255, 255, 255, 0.5);
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--event-bg),
+    var(--event-bg) 4px,
+    rgba(255, 255, 255, 0.1) 4px,
+    rgba(255, 255, 255, 0.1) 6px
+  );
+}
+
+.event-uncertain-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 0.875rem;
+  height: 0.875rem;
+  font-size: 0.5rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+  border-radius: 50%;
+  margin-left: auto;
+  flex-shrink: 0;
+}

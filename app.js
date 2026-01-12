@@ -41,6 +41,9 @@ const elements = {
   filterCount: document.getElementById('filter-count'),
   categoryFilters: document.getElementById('category-filters'),
   themeToggle: document.getElementById('theme-toggle'),
+  homeLink: document.getElementById('home-link'),
+  uncertainEventsSection: document.getElementById('uncertain-events-section'),
+  uncertainEventsBody: document.getElementById('uncertain-events-body'),
   modal: document.getElementById('event-modal'),
   modalBackdrop: document.getElementById('modal-backdrop'),
   modalClose: document.getElementById('modal-close'),
@@ -78,21 +81,35 @@ function formatDate(dateStr) {
 }
 
 /**
+ * Check if event has a valid date
+ */
+function hasValidDate(event) {
+  return event.startDate && event.startDate.trim() !== '' && 
+         event.endDate && event.endDate.trim() !== '';
+}
+
+/**
  * Format date range
  */
-function formatDateRange(startDate, endDate) {
+function formatDateRange(startDate, endDate, isUncertain = false) {
+  // Handle missing dates
+  if (!startDate || startDate.trim() === '' || !endDate || endDate.trim() === '') {
+    return 'Дата не определена';
+  }
+  
   const start = parseDate(startDate);
   const end = parseDate(endDate);
+  const uncertainPrefix = isUncertain ? '≈ ' : '';
   
   if (startDate === endDate) {
-    return formatDate(startDate);
+    return uncertainPrefix + formatDate(startDate);
   }
   
   if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
-    return `${start.getDate()}–${end.getDate()} ${start.toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' })}`;
+    return `${uncertainPrefix}${start.getDate()}–${end.getDate()} ${start.toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' })}`;
   }
   
-  return `${formatDate(startDate)} – ${formatDate(endDate)}`;
+  return `${uncertainPrefix}${formatDate(startDate)} – ${formatDate(endDate)}`;
 }
 
 /**
@@ -121,14 +138,24 @@ function isToday(year, month, day) {
 }
 
 /**
- * Get events for a specific date
+ * Get events for a specific date (excludes uncertain events)
  */
 function getEventsForDate(year, month, day) {
   const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
   
   return eventsData.events.filter(event => {
+    // Exclude uncertain events from calendar
+    if (event.dateUncertain) {
+      return false;
+    }
+    
     // Check category filter
     if (activeFilters.size > 0 && !activeFilters.has(event.category)) {
+      return false;
+    }
+    
+    // Check if event has valid dates
+    if (!hasValidDate(event)) {
       return false;
     }
     
@@ -140,13 +167,23 @@ function getEventsForDate(year, month, day) {
 }
 
 /**
- * Get events for a specific month
+ * Get events for a specific month (excludes uncertain events)
  */
 function getEventsForMonth(year, month) {
   const monthStr = `${year}-${String(month + 1).padStart(2, '0')}`;
   
   return eventsData.events.filter(event => {
+    // Exclude uncertain events from month display
+    if (event.dateUncertain) {
+      return false;
+    }
+    
     if (activeFilters.size > 0 && !activeFilters.has(event.category)) {
+      return false;
+    }
+    
+    // Check if event has valid dates
+    if (!hasValidDate(event)) {
       return false;
     }
     
@@ -154,6 +191,34 @@ function getEventsForMonth(year, month) {
     const endMonth = event.endDate.substring(0, 7);
     
     return monthStr >= startMonth && monthStr <= endMonth;
+  });
+}
+
+/**
+ * Get all uncertain events
+ */
+function getUncertainEvents() {
+  return eventsData.events.filter(event => {
+    if (!event.dateUncertain) {
+      return false;
+    }
+    
+    if (activeFilters.size > 0 && !activeFilters.has(event.category)) {
+      return false;
+    }
+    
+    return true;
+  }).sort((a, b) => {
+    // Sort by start date if available, otherwise put dateless events at the end
+    const aHasDate = hasValidDate(a);
+    const bHasDate = hasValidDate(b);
+    
+    if (aHasDate && bHasDate) {
+      return a.startDate.localeCompare(b.startDate);
+    }
+    if (aHasDate) return -1;
+    if (bHasDate) return 1;
+    return a.title.localeCompare(b.title);
   });
 }
 
@@ -342,9 +407,14 @@ function renderMiniCalendar(month) {
     const hasMultiDay = events.some(e => e.startDate !== e.endDate);
     const multiClass = hasMultiDay ? 'has-multi-event' : '';
     
+    // Check if all events on this day are uncertain
+    const hasUncertain = events.some(e => e.dateUncertain);
+    const allUncertain = events.length > 0 && events.every(e => e.dateUncertain);
+    const uncertainClass = allUncertain ? 'all-uncertain' : (hasUncertain ? 'has-uncertain' : '');
+    
     html += `
       <div 
-        class="mini-calendar-day ${todayClass} ${hasEventClass} ${multiClass}"
+        class="mini-calendar-day ${todayClass} ${hasEventClass} ${multiClass} ${uncertainClass}"
         ${eventColor ? `style="--event-color: ${eventColor}"` : ''}
       >${day}</div>
     `;
@@ -362,6 +432,47 @@ function renderMiniCalendar(month) {
 }
 
 /**
+ * Render single event list item
+ */
+function renderEventListItem(event, category) {
+  const startDay = parseInt(event.startDate.split('-')[2]);
+  const endDay = parseInt(event.endDate.split('-')[2]);
+  const startMonth = parseInt(event.startDate.split('-')[1]) - 1;
+  const endMonth = parseInt(event.endDate.split('-')[1]) - 1;
+  
+  // Format date display
+  let dateDisplay;
+  if (event.startDate === event.endDate) {
+    dateDisplay = startDay;
+  } else if (startMonth === endMonth) {
+    dateDisplay = `${startDay}–${endDay}`;
+  } else {
+    dateDisplay = `${startDay}.${String(startMonth + 1).padStart(2, '0')}–${endDay}.${String(endMonth + 1).padStart(2, '0')}`;
+  }
+  
+  // Add uncertain prefix
+  if (event.dateUncertain) {
+    dateDisplay = '≈' + dateDisplay;
+  }
+  
+  const uncertainClass = event.dateUncertain ? 'uncertain' : '';
+  
+  return `
+    <button 
+      class="event-list-item ${uncertainClass}"
+      data-event-id="${event.id}"
+      style="--event-color: ${event.color || category.color}"
+      title="${event.title}${event.dateUncertain ? ' (дата не подтверждена)' : ''}"
+    >
+      <span class="event-list-date">${dateDisplay}</span>
+      <span class="event-list-dot"></span>
+      <span class="event-list-title">${event.title}</span>
+      ${event.dateUncertain ? '<span class="event-uncertain-badge">?</span>' : ''}
+    </button>
+  `;
+}
+
+/**
  * Render event list for year view
  */
 function renderEventList(month) {
@@ -371,39 +482,33 @@ function renderEventList(month) {
     return '<div class="event-list-empty">Нет событий</div>';
   }
   
-  // Sort events by start date
-  const sortedEvents = events.sort((a, b) => a.startDate.localeCompare(b.startDate));
+  // Separate confirmed and uncertain events
+  const confirmedEvents = events.filter(e => !e.dateUncertain);
+  const uncertainEvents = events.filter(e => e.dateUncertain);
   
-  return sortedEvents.map(event => {
+  // Sort each group by start date
+  confirmedEvents.sort((a, b) => a.startDate.localeCompare(b.startDate));
+  uncertainEvents.sort((a, b) => a.startDate.localeCompare(b.startDate));
+  
+  let html = '';
+  
+  // Render confirmed events first
+  html += confirmedEvents.map(event => {
     const category = getCategoryById(event.category);
-    const startDay = parseInt(event.startDate.split('-')[2]);
-    const endDay = parseInt(event.endDate.split('-')[2]);
-    const startMonth = parseInt(event.startDate.split('-')[1]) - 1;
-    const endMonth = parseInt(event.endDate.split('-')[1]) - 1;
-    
-    // Format date display
-    let dateDisplay;
-    if (event.startDate === event.endDate) {
-      dateDisplay = startDay;
-    } else if (startMonth === endMonth) {
-      dateDisplay = `${startDay}–${endDay}`;
-    } else {
-      dateDisplay = `${startDay}.${String(startMonth + 1).padStart(2, '0')}–${endDay}.${String(endMonth + 1).padStart(2, '0')}`;
-    }
-    
-    return `
-      <button 
-        class="event-list-item"
-        data-event-id="${event.id}"
-        style="--event-color: ${event.color || category.color}"
-        title="${event.title}"
-      >
-        <span class="event-list-date">${dateDisplay}</span>
-        <span class="event-list-dot"></span>
-        <span class="event-list-title">${event.title}</span>
-      </button>
-    `;
+    return renderEventListItem(event, category);
   }).join('');
+  
+  // Render uncertain events at bottom with separator if there are any
+  if (uncertainEvents.length > 0 && confirmedEvents.length > 0) {
+    html += '<div class="uncertain-divider"><span>даты уточняются</span></div>';
+  }
+  
+  html += uncertainEvents.map(event => {
+    const category = getCategoryById(event.category);
+    return renderEventListItem(event, category);
+  }).join('');
+  
+  return html;
 }
 
 /**
@@ -432,6 +537,71 @@ function renderYearView() {
       </article>
     `;
   }).join('');
+  
+  // Render uncertain events section
+  renderUncertainEventsSection();
+}
+
+/**
+ * Render uncertain events table row
+ */
+function renderUncertainEventRow(event) {
+  const category = getCategoryById(event.category);
+  const hasDate = hasValidDate(event);
+  const dateText = hasDate 
+    ? `≈ ${formatDateRange(event.startDate, event.endDate, false)}`
+    : 'Дата не определена';
+  const hasLink = event.url && event.url.trim() !== '';
+  
+  return `
+    <tr class="border-b border-stone-100 dark:border-stone-800 hover:bg-amber-50/50 dark:hover:bg-amber-900/10 transition-colors cursor-pointer uncertain-event-row" data-event-id="${event.id}">
+      <td class="px-6 py-4">
+        <div class="flex items-center gap-3">
+          <span class="w-3 h-3 rounded-full flex-shrink-0" style="background-color: ${event.color || category.color}"></span>
+          <span class="font-medium text-stone-900 dark:text-stone-100">${event.title}</span>
+        </div>
+      </td>
+      <td class="px-6 py-4 text-stone-600 dark:text-stone-400 font-mono text-sm whitespace-nowrap">
+        ${dateText}
+      </td>
+      <td class="px-6 py-4 hidden sm:table-cell">
+        <span class="inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-full" 
+              style="background-color: ${category.color}20; color: ${category.color}">
+          ${category.name}
+        </span>
+      </td>
+      <td class="px-6 py-4 text-stone-600 dark:text-stone-400 hidden md:table-cell">
+        ${event.location || '—'}
+      </td>
+      <td class="px-6 py-4">
+        ${hasLink ? `
+          <a href="${event.url}" target="_blank" rel="noopener noreferrer" 
+             class="inline-flex items-center gap-1 text-accent hover:text-accent-dark transition-colors"
+             onclick="event.stopPropagation()">
+            <span>Открыть</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+            </svg>
+          </a>
+        ` : `<span class="text-stone-400 dark:text-stone-600">—</span>`}
+      </td>
+    </tr>
+  `;
+}
+
+/**
+ * Render the uncertain events section
+ */
+function renderUncertainEventsSection() {
+  const uncertainEvents = getUncertainEvents();
+  
+  if (uncertainEvents.length === 0) {
+    elements.uncertainEventsSection.classList.add('hidden');
+    return;
+  }
+  
+  elements.uncertainEventsSection.classList.remove('hidden');
+  elements.uncertainEventsBody.innerHTML = uncertainEvents.map(event => renderUncertainEventRow(event)).join('');
 }
 
 /**
@@ -444,28 +614,58 @@ function renderMonthEventList(month) {
     return '<div class="month-event-list-empty">Нет событий в этом месяце</div>';
   }
   
-  // Sort events by start date
-  const sortedEvents = events.sort((a, b) => a.startDate.localeCompare(b.startDate));
+  // Separate confirmed and uncertain events
+  const confirmedEvents = events.filter(e => !e.dateUncertain);
+  const uncertainEvents = events.filter(e => e.dateUncertain);
   
-  return sortedEvents.map(event => {
+  // Sort each group by start date
+  confirmedEvents.sort((a, b) => a.startDate.localeCompare(b.startDate));
+  uncertainEvents.sort((a, b) => a.startDate.localeCompare(b.startDate));
+  
+  const renderItem = (event) => {
     const category = getCategoryById(event.category);
-    const dateRange = formatDateRange(event.startDate, event.endDate);
+    const dateRange = formatDateRange(event.startDate, event.endDate, event.dateUncertain);
+    const uncertainClass = event.dateUncertain ? 'uncertain' : '';
     
     return `
       <button 
-        class="month-event-list-item"
+        class="month-event-list-item ${uncertainClass}"
         data-event-id="${event.id}"
         style="--event-color: ${event.color || category.color}"
       >
         <span class="month-event-list-dot"></span>
         <div class="month-event-list-content">
-          <span class="month-event-list-title">${event.title}</span>
+          <span class="month-event-list-title">
+            ${event.title}
+            ${event.dateUncertain ? '<span class="month-uncertain-badge">дата не подтверждена</span>' : ''}
+          </span>
           <span class="month-event-list-date">${dateRange}</span>
         </div>
         <span class="month-event-list-category">${category.name}</span>
       </button>
     `;
-  }).join('');
+  };
+  
+  let html = confirmedEvents.map(renderItem).join('');
+  
+  // Add uncertain section if there are uncertain events
+  if (uncertainEvents.length > 0) {
+    if (confirmedEvents.length > 0) {
+      html += `
+        <div class="month-uncertain-section">
+          <div class="month-uncertain-header">
+            <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>Даты ещё не подтверждены</span>
+          </div>
+        </div>
+      `;
+    }
+    html += uncertainEvents.map(renderItem).join('');
+  }
+  
+  return html;
 }
 
 /**
@@ -529,18 +729,20 @@ function renderDayCell(year, month, day, events, isOtherMonth) {
     const category = getCategoryById(event.category);
     const position = getEventDayPosition(event, year, month, day);
     const positionClass = position !== 'single' ? `multi-day multi-day-${position}` : '';
+    const uncertainClass = event.dateUncertain ? 'uncertain' : '';
     
     // Calculate background with opacity
     const bgColor = event.color || category.color;
     
     return `
       <button 
-        class="event-item ${positionClass}"
+        class="event-item ${positionClass} ${uncertainClass}"
         data-event-id="${event.id}"
         style="--event-bg: ${bgColor}"
-        title="${event.title}"
+        title="${event.title}${event.dateUncertain ? ' (дата не подтверждена)' : ''}"
       >
         <span class="event-title">${event.title}</span>
+        ${event.dateUncertain && position !== 'middle' && position !== 'end' ? '<span class="event-uncertain-mark">?</span>' : ''}
       </button>
     `;
   }).join('');
@@ -573,10 +775,32 @@ function showEventModal(eventId) {
   elements.modalTitle.textContent = event.title;
   elements.modalCategory.textContent = category.name;
   elements.modalCategoryDot.style.backgroundColor = event.color || category.color;
-  elements.modalDate.textContent = formatDateRange(event.startDate, event.endDate);
-  elements.modalLocation.textContent = event.location;
-  elements.modalDescription.textContent = event.description;
+  
+  // Handle uncertain dates and missing dates
+  const eventHasDate = hasValidDate(event);
+  let dateHtml;
+  
+  if (!eventHasDate) {
+    dateHtml = '<span class="text-amber-600 dark:text-amber-400">Дата ещё не определена</span>';
+  } else if (event.dateUncertain) {
+    const dateText = formatDateRange(event.startDate, event.endDate, true);
+    dateHtml = `${dateText} <span class="inline-flex items-center ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400">дата не подтверждена</span>`;
+  } else {
+    dateHtml = formatDateRange(event.startDate, event.endDate, false);
+  }
+  
+  elements.modalDate.innerHTML = dateHtml;
+  
+  elements.modalLocation.textContent = event.location || 'Не указано';
+  elements.modalDescription.textContent = event.description || 'Описание пока недоступно';
   elements.modalLink.href = event.url;
+  
+  // Hide link if no URL
+  if (!event.url || event.url.trim() === '') {
+    elements.modalLink.classList.add('hidden');
+  } else {
+    elements.modalLink.classList.remove('hidden');
+  }
   
   elements.modal.classList.remove('hidden', 'hiding');
   elements.modal.classList.add('show');
@@ -613,6 +837,20 @@ function showYearView() {
   updateURLState();
 }
 
+/**
+ * Handle click on uncertain event row
+ */
+function handleUncertainEventClick(e) {
+  const row = e.target.closest('.uncertain-event-row');
+  if (!row) return;
+  
+  // Don't trigger if clicking on a link
+  if (e.target.closest('a')) return;
+  
+  const eventId = row.dataset.eventId;
+  showEventModal(eventId);
+}
+
 function showMonthView(month) {
   currentMonth = month;
   
@@ -621,6 +859,9 @@ function showMonthView(month) {
   elements.monthView.classList.add('showing');
   elements.backToYear.classList.remove('hidden');
   elements.backToYear.classList.add('flex');
+  
+  // Hide uncertain events section in month view
+  elements.uncertainEventsSection.classList.add('hidden');
   
   renderMonthView();
   updateURLState();
@@ -707,6 +948,14 @@ function toggleFilterPanel() {
   elements.filterToggle.setAttribute('aria-expanded', !isExpanded);
 }
 
+/**
+ * Navigate to home (year view)
+ */
+function handleHomeClick(e) {
+  e.preventDefault();
+  showYearView();
+}
+
 // ============================================
 // Keyboard Navigation
 // ============================================
@@ -785,16 +1034,27 @@ async function init() {
     
     elements.monthGrid.addEventListener('click', handleEventClick);
     elements.monthEventList.addEventListener('click', handleMonthEventListClick);
+    elements.uncertainEventsBody.addEventListener('click', handleUncertainEventClick);
     elements.categoryFilters.addEventListener('click', handleFilterClick);
     elements.filterToggle.addEventListener('click', toggleFilterPanel);
     elements.themeToggle.addEventListener('click', toggleTheme);
     elements.backToYear.addEventListener('click', showYearView);
+    elements.homeLink.addEventListener('click', handleHomeClick);
+    
     elements.prevMonth.addEventListener('click', () => navigateMonth(-1));
     elements.nextMonth.addEventListener('click', () => navigateMonth(1));
     
     // Modal listeners
     elements.modalClose.addEventListener('click', hideEventModal);
     elements.modalBackdrop.addEventListener('click', hideEventModal);
+    
+    // Close modal when clicking outside modal content
+    elements.modal.addEventListener('click', (e) => {
+      const modalContent = document.getElementById('modal-content');
+      if (!modalContent.contains(e.target)) {
+        hideEventModal();
+      }
+    });
     
     // Keyboard navigation
     document.addEventListener('keydown', handleKeyboard);

@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Календарь событий 2026</title>
-  <meta name="description" content="Календарь фурри-событий на 2026 год. Конвенции, встречи, мастер-классы и многое другое.">
+  <title>Фурри события в РФ за 2026 год</title>
+  <meta name="description" content="Календарь фурри-событий на 2026 год. Конвенции, маркеты и многое другое.">
   
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Календарь событий 2026">
-  <meta property="og:description" content="Календарь фурри-событий на 2026 год. Конвенции, встречи, мастер-классы и многое другое.">
+  <meta property="og:title" content="Фурри события в РФ за 2026 год">
+  <meta property="og:description" content="Календарь фурри-событий на 2026 год. Конвенции, маркеты и многое другое.">
   <meta property="og:locale" content="ru_RU">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Календарь событий 2026">
-  <meta name="twitter:description" content="Календарь фурри-событий на 2026 год. Конвенции, встречи, мастер-классы и многое другое.">
+  <meta name="twitter:title" content="Фурри события в РФ за 2026 год">
+  <meta name="twitter:description" content="Календарь фурри-событий на 2026 год. Конвенции, маркеты и многое другое.">
   
   <!-- Theme Color -->
   <meta name="theme-color" content="#d946ef">
@@ -82,17 +82,17 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
         <!-- Logo & Title -->
-        <div class="flex items-center gap-3">
+        <a href="#" id="home-link" class="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer">
           <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent to-fuchsia-600 flex items-center justify-center shadow-lg shadow-accent/25">
             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
             </svg>
           </div>
           <div>
-            <h1 class="text-xl font-semibold tracking-tight">Календарь событий</h1>
+            <h1 class="text-xl font-semibold tracking-tight">Фурри календарь</h1>
             <p class="text-xs text-stone-500 dark:text-stone-400 font-mono" id="current-year">2026</p>
           </div>
-        </div>
+        </a>
         
         <!-- Navigation & Controls -->
         <div class="flex items-center gap-2">
@@ -103,6 +103,14 @@
             </svg>
             <span>Год</span>
           </button>
+          
+          <!-- All Events Link -->
+          <a href="events.html" class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+            </svg>
+            <span class="hidden sm:inline">Все события</span>
+          </a>
           
           <!-- Filter Toggle -->
           <button id="filter-toggle" class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-all" aria-expanded="false" aria-controls="filter-panel">
@@ -184,6 +192,40 @@
         <!-- Events will be inserted here by JS -->
       </div>
     </div>
+
+    <!-- Uncertain Events Section (shown in year view) -->
+    <div id="uncertain-events-section" class="hidden mt-8">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/30">
+          <svg class="w-6 h-6 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+        <div>
+          <h2 class="text-xl font-semibold text-stone-800 dark:text-stone-200">Ещё не подтверждённые события</h2>
+          <p class="text-sm text-stone-500 dark:text-stone-400">Эти события запланированы, но точные даты пока не известны</p>
+        </div>
+      </div>
+      
+      <div class="bg-white dark:bg-surface-900 rounded-2xl shadow-sm overflow-hidden border-2 border-dashed border-amber-300 dark:border-amber-700">
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-stone-200 dark:border-stone-700">
+                <th class="text-left px-6 py-4 text-sm font-semibold text-stone-600 dark:text-stone-300">Название</th>
+                <th class="text-left px-6 py-4 text-sm font-semibold text-stone-600 dark:text-stone-300">Примерные даты</th>
+                <th class="text-left px-6 py-4 text-sm font-semibold text-stone-600 dark:text-stone-300 hidden sm:table-cell">Тип</th>
+                <th class="text-left px-6 py-4 text-sm font-semibold text-stone-600 dark:text-stone-300 hidden md:table-cell">Место</th>
+                <th class="text-left px-6 py-4 text-sm font-semibold text-stone-600 dark:text-stone-300">Ссылка</th>
+              </tr>
+            </thead>
+            <tbody id="uncertain-events-body">
+              <!-- Uncertain events will be inserted here by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </main>
 
   <!-- Event Modal -->
@@ -258,7 +300,7 @@
       <span>Кликните на событие для подробностей</span>
     </div>
     <p class="text-center text-sm text-stone-500 dark:text-stone-400 mt-4">
-      <a href="mailto:droomvos@gmail.com" class="text-accent hover:text-accent-dark hover:underline transition-colors">Если у вас есть фурри событие которого нет в календаре пришлите его сюда</a>
+      <a href="mailto:droomvos@gmail.com" class="text-accent hover:text-accent-dark hover:underline transition-colors">Что бы добавить событие в календарь пришлите его сюда</a>
     </p>
   </footer>
 

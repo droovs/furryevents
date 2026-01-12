@@ -142,6 +142,54 @@
       "location": "",
       "description": "Фурри кон для первосортных",
       "url": "https://t.me/SillyConNews"
+    },
+    {
+      "id": "fall-camping-2026",
+      "title": "Осенний кемпинг",
+      "startDate": "2026-10-01",
+      "endDate": "2026-10-04",
+      "dateUncertain": true,
+      "color": "#10b981",
+      "category": "camping",
+      "location": "",
+      "description": "Осенний кемпинг — точные даты уточняются",
+      "url": ""
+    },
+    {
+      "id": "furmarket-autumn-2026",
+      "title": "ФурМаркет Осенний",
+      "startDate": "2026-11-01",
+      "endDate": "2026-11-01",
+      "dateUncertain": true,
+      "color": "#f59e0b",
+      "category": "market",
+      "location": "",
+      "description": "Осенний маркет — дата уточняется",
+      "url": "https://vk.com/furrmarket"
+    },
+    {
+      "id": "winter-con-2026",
+      "title": "Зимний кон",
+      "startDate": "2026-12-20",
+      "endDate": "2026-12-22",
+      "dateUncertain": true,
+      "color": "#8b5cf6",
+      "category": "convention",
+      "location": "",
+      "description": "Зимний фурри конвент — даты ориентировочные",
+      "url": ""
+    },
+    {
+      "id": "new-outdoor-2026",
+      "title": "Новый кон на природе",
+      "startDate": "",
+      "endDate": "",
+      "dateUncertain": true,
+      "color": "#06b6d4",
+      "category": "outdoor",
+      "location": "",
+      "description": "Планируется новый кон на природе, даты будут объявлены позже",
+      "url": ""
     }
   ],
   "categories": [

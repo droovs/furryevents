@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Все события — Фурри календарь 2026</title>
+  <meta name="description" content="Полный список фурри-событий на 2026 год с фильтрами по типу.">
+  
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Все события — Фурри календарь 2026">
+  <meta property="og:description" content="Полный список фурри-событий на 2026 год с фильтрами по типу.">
+  <meta property="og:locale" content="ru_RU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Все события — Фурри календарь 2026">
+  <meta name="twitter:description" content="Полный список фурри-событий на 2026 год с фильтрами по типу.">
+  
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#d946ef">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Outfit', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            surface: {
+              50: '#fafaf9',
+              100: '#f5f5f4',
+              200: '#e7e5e4',
+              800: '#292524',
+              900: '#1c1917',
+              950: '#0c0a09',
+            },
+            accent: {
+              DEFAULT: '#d946ef',
+              light: '#e879f9',
+              dark: '#a21caf',
+            }
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.3s ease-out',
+            'slide-up': 'slideUp 0.4s ease-out',
+            'scale-in': 'scaleIn 0.2s ease-out',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            slideUp: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            scaleIn: {
+              '0%': { opacity: '0', transform: 'scale(0.95)' },
+              '100%': { opacity: '1', transform: 'scale(1)' },
+            },
+          },
+        },
+      },
+    }
+  </script>
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen bg-surface-50 dark:bg-surface-950 text-stone-800 dark:text-stone-200 font-sans transition-colors duration-300">
+  
+  <!-- Header -->
+  <header class="sticky top-0 z-40 backdrop-blur-xl bg-surface-50/80 dark:bg-surface-950/80 border-b border-stone-200/50 dark:border-stone-800/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo & Title -->
+        <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent to-fuchsia-600 flex items-center justify-center shadow-lg shadow-accent/25">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-xl font-semibold tracking-tight">Все события</h1>
+            <p class="text-xs text-stone-500 dark:text-stone-400 font-mono">2026</p>
+          </div>
+        </a>
+        
+        <!-- Navigation & Controls -->
+        <div class="flex items-center gap-2">
+          <!-- Back to Calendar -->
+          <a href="index.html" class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            <span class="hidden sm:inline">Календарь</span>
+          </a>
+          
+          <!-- Theme Toggle -->
+          <button id="theme-toggle" class="p-2 text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-all" aria-label="Переключить тему">
+            <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+            <svg class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Filters Section -->
+    <div class="mb-8">
+      <h2 class="text-lg font-semibold mb-4 text-stone-700 dark:text-stone-300">Фильтр по типу</h2>
+      <div class="flex flex-wrap items-center gap-2" id="category-filters" role="group" aria-label="Фильтр по категориям">
+        <!-- Categories will be inserted here by JS -->
+      </div>
+    </div>
+
+    <!-- Events Table -->
+    <div class="bg-white dark:bg-surface-900 rounded-2xl shadow-sm overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full" id="events-table">
+          <thead>
+            <tr class="border-b border-stone-200 dark:border-stone-700">
+              <th class="text-left px-6 py-4 text-sm font-semibold text-stone-600 dark:text-stone-300">Название</th>
+              <th class="text-left px-6 py-4 text-sm font-semibold text-stone-600 dark:text-stone-300">Даты</th>
+              <th class="text-left px-6 py-4 text-sm font-semibold text-stone-600 dark:text-stone-300 hidden sm:table-cell">Тип</th>
+              <th class="text-left px-6 py-4 text-sm font-semibold text-stone-600 dark:text-stone-300 hidden md:table-cell">Место</th>
+              <th class="text-left px-6 py-4 text-sm font-semibold text-stone-600 dark:text-stone-300">Ссылка</th>
+            </tr>
+          </thead>
+          <tbody id="events-body">
+            <!-- Events will be inserted here by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Uncertain Events Section -->
+    <div id="uncertain-section" class="mt-8 hidden">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/30">
+          <svg class="w-5 h-5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+        <div>
+          <h2 class="text-lg font-semibold text-stone-700 dark:text-stone-300">Ещё не подтверждённые даты</h2>
+          <p class="text-sm text-stone-500 dark:text-stone-400">Эти события запланированы, но точные даты пока не известны</p>
+        </div>
+      </div>
+      
+      <div class="bg-white dark:bg-surface-900 rounded-2xl shadow-sm overflow-hidden border-2 border-dashed border-amber-300 dark:border-amber-700">
+        <div class="overflow-x-auto">
+          <table class="w-full" id="uncertain-table">
+            <thead>
+              <tr class="border-b border-stone-200 dark:border-stone-700">
+                <th class="text-left px-6 py-4 text-sm font-semibold text-stone-600 dark:text-stone-300">Название</th>
+                <th class="text-left px-6 py-4 text-sm font-semibold text-stone-600 dark:text-stone-300">Примерные даты</th>
+                <th class="text-left px-6 py-4 text-sm font-semibold text-stone-600 dark:text-stone-300 hidden sm:table-cell">Тип</th>
+                <th class="text-left px-6 py-4 text-sm font-semibold text-stone-600 dark:text-stone-300 hidden md:table-cell">Место</th>
+                <th class="text-left px-6 py-4 text-sm font-semibold text-stone-600 dark:text-stone-300">Ссылка</th>
+              </tr>
+            </thead>
+            <tbody id="uncertain-body">
+              <!-- Uncertain events will be inserted here by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-4 text-sm text-stone-500 dark:text-stone-400">
+      <span class="flex items-center gap-2">
+        <span class="w-3 h-3 rounded-full bg-gradient-to-br from-accent to-fuchsia-600"></span>
+        <span>Подтверждённые события</span>
+      </span>
+      <span class="text-stone-300 dark:text-stone-600">•</span>
+      <span class="flex items-center gap-2">
+        <span class="relative w-3 h-3">
+          <span class="absolute inset-0 rounded-full bg-amber-400 opacity-50"></span>
+          <svg class="relative w-3 h-3 text-amber-600" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+          </svg>
+        </span>
+        <span>Даты не подтверждены</span>
+      </span>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-8 border-t border-stone-200 dark:border-stone-800">
+    <p class="text-center text-sm text-stone-500 dark:text-stone-400">
+      <a href="mailto:droomvos@gmail.com" class="text-accent hover:text-accent-dark hover:underline transition-colors">Что бы добавить событие в календарь пришлите его сюда</a>
+    </p>
+  </footer>
+
+  <script src="events-page.js"></script>
+</body>
+</html>
