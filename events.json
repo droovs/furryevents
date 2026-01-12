@@ -1,0 +1,153 @@
+{
+  "events": [
+    {
+      "id": "furmarket-2026",
+      "title": "ФурМаркет",
+      "startDate": "2026-03-22",
+      "endDate": "2026-03-22",
+      "color": "#f59e0b",
+      "category": "market",
+      "location": "",
+      "description": "ФурМаркет — это маркет на фурри-тематику!",
+      "url": "https://vk.com/furrmarket"
+    },
+    {
+      "id": "ufc-2026",
+      "title": "UFC",
+      "startDate": "2026-04-16",
+      "endDate": "2026-04-19",
+      "color": "#8b5cf6",
+      "category": "convention",
+      "location": "",
+      "description": "",
+      "url": ""
+    },
+    {
+      "id": "camping-may-2026",
+      "title": "Кемпинг",
+      "startDate": "2026-05-01",
+      "endDate": "2026-05-04",
+      "color": "#10b981",
+      "category": "camping",
+      "location": "",
+      "description": "",
+      "url": ""
+    },
+    {
+      "id": "bbfc-2026",
+      "title": "BBFC",
+      "startDate": "2026-05-08",
+      "endDate": "2026-05-11",
+      "color": "#8b5cf6",
+      "category": "convention",
+      "location": "",
+      "description": "Самый худший лучший фурри кон",
+      "url": "https://www.bbfc.lol/news"
+    },
+    {
+      "id": "foxwood-2026",
+      "title": "FoxWood",
+      "startDate": "2026-05-14",
+      "endDate": "2026-05-17",
+      "color": "#8b5cf6",
+      "category": "convention",
+      "location": "",
+      "description": "Фурри-конвент Foxwood",
+      "url": "https://t.me/foxwoodnews"
+    },
+    {
+      "id": "camping-june-2026",
+      "title": "Кемпинг",
+      "startDate": "2026-06-12",
+      "endDate": "2026-06-15",
+      "color": "#10b981",
+      "category": "camping",
+      "location": "",
+      "description": "",
+      "url": ""
+    },
+    {
+      "id": "gp-2026",
+      "title": "ГП",
+      "startDate": "2026-06-26",
+      "endDate": "2026-06-28",
+      "color": "#06b6d4",
+      "category": "outdoor",
+      "location": "",
+      "description": "",
+      "url": ""
+    },
+    {
+      "id": "wolkistan-2026",
+      "title": "Волкистан",
+      "startDate": "2026-06-27",
+      "endDate": "2026-06-29",
+      "color": "#06b6d4",
+      "category": "outdoor",
+      "location": "",
+      "description": "Фурри кон",
+      "url": "https://t.me/wolkistan"
+    },
+    {
+      "id": "wildfurrence-2026",
+      "title": "Вайлдфурренция",
+      "startDate": "2026-07-16",
+      "endDate": "2026-07-19",
+      "color": "#06b6d4",
+      "category": "outdoor",
+      "location": "Ладога",
+      "description": "Фурри кон на Ладоге",
+      "url": ""
+    },
+    {
+      "id": "camping-july-2026",
+      "title": "Кемпинг",
+      "startDate": "2026-07-19",
+      "endDate": "2026-07-20",
+      "color": "#10b981",
+      "category": "camping",
+      "location": "",
+      "description": "",
+      "url": ""
+    },
+    {
+      "id": "turfur-2026",
+      "title": "Турфур",
+      "startDate": "2026-08-06",
+      "endDate": "2026-08-09",
+      "color": "#06b6d4",
+      "category": "outdoor",
+      "location": "",
+      "description": "",
+      "url": ""
+    },
+    {
+      "id": "camping-august-2026",
+      "title": "Кемпинг",
+      "startDate": "2026-08-29",
+      "endDate": "2026-08-31",
+      "color": "#10b981",
+      "category": "camping",
+      "location": "",
+      "description": "",
+      "url": ""
+    },
+    {
+      "id": "tupicon-2026",
+      "title": "Тупикон",
+      "startDate": "2026-09-10",
+      "endDate": "2026-09-13",
+      "color": "#8b5cf6",
+      "category": "convention",
+      "location": "",
+      "description": "Фурри кон для первосортных",
+      "url": "https://t.me/SillyConNews"
+    }
+  ],
+  "categories": [
+    { "id": "convention", "name": "Конвенции", "color": "#8b5cf6" },
+    { "id": "outdoor", "name": "Коны на природе", "color": "#06b6d4" },
+    { "id": "camping", "name": "Кемпинги", "color": "#10b981" },
+    { "id": "market", "name": "Маркеты", "color": "#f59e0b" }
+  ]
+}

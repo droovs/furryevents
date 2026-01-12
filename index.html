@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Календарь событий 2026</title>
+  <meta name="description" content="Календарь фурри-событий на 2026 год. Конвенции, встречи, мастер-классы и многое другое.">
+  
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Календарь событий 2026">
+  <meta property="og:description" content="Календарь фурри-событий на 2026 год. Конвенции, встречи, мастер-классы и многое другое.">
+  <meta property="og:locale" content="ru_RU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Календарь событий 2026">
+  <meta name="twitter:description" content="Календарь фурри-событий на 2026 год. Конвенции, встречи, мастер-классы и многое другое.">
+  
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#d946ef">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Outfit', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            surface: {
+              50: '#fafaf9',
+              100: '#f5f5f4',
+              200: '#e7e5e4',
+              800: '#292524',
+              900: '#1c1917',
+              950: '#0c0a09',
+            },
+            accent: {
+              DEFAULT: '#d946ef',
+              light: '#e879f9',
+              dark: '#a21caf',
+            }
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.3s ease-out',
+            'slide-up': 'slideUp 0.4s ease-out',
+            'scale-in': 'scaleIn 0.2s ease-out',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            slideUp: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            scaleIn: {
+              '0%': { opacity: '0', transform: 'scale(0.95)' },
+              '100%': { opacity: '1', transform: 'scale(1)' },
+            },
+          },
+        },
+      },
+    }
+  </script>
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen bg-surface-50 dark:bg-surface-950 text-stone-800 dark:text-stone-200 font-sans transition-colors duration-300">
+  
+  <!-- Header -->
+  <header class="sticky top-0 z-40 backdrop-blur-xl bg-surface-50/80 dark:bg-surface-950/80 border-b border-stone-200/50 dark:border-stone-800/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo & Title -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent to-fuchsia-600 flex items-center justify-center shadow-lg shadow-accent/25">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-xl font-semibold tracking-tight">Календарь событий</h1>
+            <p class="text-xs text-stone-500 dark:text-stone-400 font-mono" id="current-year">2026</p>
+          </div>
+        </div>
+        
+        <!-- Navigation & Controls -->
+        <div class="flex items-center gap-2">
+          <!-- Back to Year View (hidden by default) -->
+          <button id="back-to-year" class="hidden items-center gap-2 px-3 py-2 text-sm font-medium text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            <span>Год</span>
+          </button>
+          
+          <!-- Filter Toggle -->
+          <button id="filter-toggle" class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-all" aria-expanded="false" aria-controls="filter-panel">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+            </svg>
+            <span class="hidden sm:inline">Фильтры</span>
+            <span id="filter-count" class="hidden min-w-5 h-5 px-1.5 text-xs font-semibold bg-accent text-white rounded-full flex items-center justify-center"></span>
+          </button>
+          
+          <!-- Theme Toggle -->
+          <button id="theme-toggle" class="p-2 text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-all" aria-label="Переключить тему">
+            <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+            <svg class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Filter Panel -->
+    <div id="filter-panel" class="hidden border-t border-stone-200/50 dark:border-stone-800/50 bg-surface-100/50 dark:bg-surface-900/50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex flex-wrap items-center gap-2" id="category-filters" role="group" aria-label="Фильтр по категориям">
+          <!-- Categories will be inserted here by JS -->
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Year View -->
+    <div id="year-view" class="animate-fade-in">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6" id="months-grid">
+        <!-- Months will be inserted here by JS -->
+      </div>
+    </div>
+    
+    <!-- Month View (hidden by default) -->
+    <div id="month-view" class="hidden animate-slide-up">
+      <div class="mb-6 flex items-center justify-between">
+        <h2 id="month-title" class="text-2xl sm:text-3xl font-bold tracking-tight"></h2>
+        <div class="flex items-center gap-2">
+          <button id="prev-month" class="p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-all" aria-label="Предыдущий месяц">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          </button>
+          <button id="next-month" class="p-2 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-all" aria-label="Следующий месяц">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Weekday Headers -->
+      <div class="grid grid-cols-7 mb-2">
+        <div class="text-center text-xs font-medium text-stone-500 dark:text-stone-400 py-2">Пн</div>
+        <div class="text-center text-xs font-medium text-stone-500 dark:text-stone-400 py-2">Вт</div>
+        <div class="text-center text-xs font-medium text-stone-500 dark:text-stone-400 py-2">Ср</div>
+        <div class="text-center text-xs font-medium text-stone-500 dark:text-stone-400 py-2">Чт</div>
+        <div class="text-center text-xs font-medium text-stone-500 dark:text-stone-400 py-2">Пт</div>
+        <div class="text-center text-xs font-medium text-stone-500 dark:text-stone-400 py-2">Сб</div>
+        <div class="text-center text-xs font-medium text-stone-500 dark:text-stone-400 py-2">Вс</div>
+      </div>
+      
+      <!-- Calendar Grid -->
+      <div id="month-grid" class="grid grid-cols-7 gap-px bg-stone-200 dark:bg-stone-700 rounded-xl overflow-hidden shadow-sm">
+        <!-- Days will be inserted here by JS -->
+      </div>
+      
+      <!-- Month Events List -->
+      <div id="month-event-list" class="month-view-event-list">
+        <!-- Events will be inserted here by JS -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Event Modal -->
+  <div id="event-modal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="modal-backdrop"></div>
+    
+    <!-- Modal Content -->
+    <div class="absolute inset-0 overflow-y-auto">
+      <div class="flex min-h-full items-center justify-center p-4">
+        <div id="modal-content" class="relative w-full max-w-lg bg-white dark:bg-surface-900 rounded-2xl shadow-2xl animate-scale-in">
+          <!-- Modal Header -->
+          <div class="flex items-start justify-between p-6 pb-4">
+            <div class="flex items-center gap-3">
+              <div id="modal-category-dot" class="w-3 h-3 rounded-full"></div>
+              <span id="modal-category" class="text-sm font-medium text-stone-500 dark:text-stone-400"></span>
+            </div>
+            <button id="modal-close" class="p-1 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg transition-colors" aria-label="Закрыть">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+          
+          <!-- Modal Body -->
+          <div class="px-6 pb-6">
+            <h3 id="modal-title" class="text-2xl font-bold tracking-tight mb-4"></h3>
+            
+            <div class="space-y-3 mb-6">
+              <!-- Date -->
+              <div class="flex items-center gap-3 text-stone-600 dark:text-stone-300">
+                <svg class="w-5 h-5 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                <span id="modal-date" class="text-sm"></span>
+              </div>
+              
+              <!-- Location -->
+              <div class="flex items-center gap-3 text-stone-600 dark:text-stone-300">
+                <svg class="w-5 h-5 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <span id="modal-location" class="text-sm"></span>
+              </div>
+            </div>
+            
+            <!-- Description -->
+            <p id="modal-description" class="text-stone-600 dark:text-stone-300 leading-relaxed mb-6"></p>
+            
+            <!-- Link -->
+            <a id="modal-link" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2.5 bg-accent hover:bg-accent-dark text-white font-medium rounded-xl transition-colors shadow-lg shadow-accent/25">
+              <span>Подробнее</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Legend (Footer) -->
+  <footer class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-8 border-t border-stone-200 dark:border-stone-800">
+    <div class="flex flex-wrap items-center justify-center gap-4 text-sm text-stone-500 dark:text-stone-400">
+      <span class="flex items-center gap-2">
+        <span class="w-6 h-6 rounded-lg bg-accent/20 dark:bg-accent/30 flex items-center justify-center text-xs font-bold text-accent">12</span>
+        <span>Сегодня</span>
+      </span>
+      <span class="text-stone-300 dark:text-stone-600">•</span>
+      <span>Кликните на событие для подробностей</span>
+    </div>
+    <p class="text-center text-sm text-stone-500 dark:text-stone-400 mt-4">
+      <a href="mailto:droomvos@gmail.com" class="text-accent hover:text-accent-dark hover:underline transition-colors">Если у вас есть фурри событие которого нет в календаре пришлите его сюда</a>
+    </p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

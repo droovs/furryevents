@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Страница не найдена | Календарь событий 2026</title>
+  <script>
+    // GitHub Pages SPA redirect
+    // Handles both root domain (username.github.io) and 
+    // project pages (username.github.io/repo-name/)
+    (function() {
+      var segmentCount = 1; // Adjust if your repo is nested deeper
+      
+      var location = window.location;
+      var pathSegments = location.pathname.split('/');
+      
+      // For project pages, the first segment is the repo name
+      // We need to preserve it in the redirect
+      var repoSegment = pathSegments.slice(1, segmentCount + 1).join('/');
+      var remainingPath = pathSegments.slice(segmentCount + 1).join('/');
+      
+      // Build the redirect URL
+      var basePath = repoSegment ? '/' + repoSegment + '/' : '/';
+      
+      // Encode the remaining path and query in the hash
+      // This allows the main app to restore the original URL state
+      var redirect = basePath + '?' + 
+        'p=' + encodeURIComponent(remainingPath) +
+        (location.search ? '&q=' + encodeURIComponent(location.search.slice(1)) : '') +
+        location.hash;
+      
+      location.replace(redirect);
+    })();
+  </script>
+  <noscript>
+    <meta http-equiv="refresh" content="0;url=./">
+  </noscript>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #1c1917;
+      color: #d6d3d1;
+    }
+  </style>
+</head>
+<body>
+  <p>Перенаправление...</p>
+</body>
+</html>
